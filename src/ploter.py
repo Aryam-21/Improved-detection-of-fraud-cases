@@ -17,5 +17,6 @@ class Ploter:
         plt.show()
     def bar_ploter(self, data_col):
         sns.barplot(x=data_col.index, y=data_col.values)
-        plt.title(f"Bar Plot of {data_col.name}")
+        plt.title(f"Bar Plot of {data_col.name}...")
+        plt.xticks(rotation=90)
         plt.show()
