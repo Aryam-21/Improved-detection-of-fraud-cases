@@ -1,7 +1,5 @@
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score, precision_recall_curve, auc, confusion_matrix
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import  StratifiedKFold, cross_validate
 class ModelTrainer:
     def __init__(self):
         pass
@@ -25,3 +23,17 @@ class ModelTrainer:
             "auc_pr": auc_pr,
             "confusion_matrix": cm
         }
+    def cross_validation(self, model, x, y):
+        skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        scoring = {
+            'f1': 'f1',
+            'auc_pr':'average_precision'
+        }
+        c_validate = cross_validate(model, x, y, cv=skf, scoring=scoring, n_jobs=-1)
+        results = {
+        'f1_mean': c_validate['test_f1'].mean(),
+        'f1_std': c_validate['test_f1'].std(),
+        'auc_pr_mean': c_validate['test_auc_pr'].mean(),
+        'auc_pr_std': c_validate['test_auc_pr'].std()
+        }
+        return c_validate, results
