@@ -27,7 +27,7 @@ class ModelTrainer:
         if not hasattr(model, "predict") or not hasattr(model, "predict_proba"):
             raise TypeError("Model must support predict() and predict_proba()")
 
-        self._validate_data(x_test)
+        self.validate_data(x_test)
 
         try:
             y_pred = model.predict(x_test)
