@@ -86,7 +86,7 @@ class ModelTrainer:
                                y_train, 
                                n_iter=20, 
                                cv=5, 
-                               scoring='f1'):
+                               scoring='average_precision'):
         """
         Performs RandomizedSearchCV and returns the best model and parameters.
         """
