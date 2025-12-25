@@ -33,10 +33,14 @@ env/
 
 
 # Data files
-data/
+models/
+*.joblib
+
+Data/
 *.csv
 *.json
 *.xlsx
+*.npy
 # DVC metadata files (.dvc) must be tracked by Git
 !*.dvc
 

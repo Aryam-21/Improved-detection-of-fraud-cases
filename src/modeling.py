@@ -1,5 +1,6 @@
 from sklearn.metrics import f1_score, precision_recall_curve, auc, confusion_matrix
-from sklearn.model_selection import  StratifiedKFold, cross_validate
+from sklearn.model_selection import StratifiedKFold, cross_validate, RandomizedSearchCV
+
 import numpy as np
 class ModelTrainer:
     def __init__(self):
@@ -78,3 +79,40 @@ class ModelTrainer:
         'auc_pr_std': c_validate['test_auc_pr'].std()
         }
         return c_validate, results
+    def hyperparameter_tuning(self,
+                               model, 
+                               param_distribution, 
+                               x_train, 
+                               y_train, 
+                               n_iter=20, 
+                               cv=5, 
+                               scoring='average_precision'):
+        """
+        Performs RandomizedSearchCV and returns the best model and parameters.
+        """
+        if model is None:
+            raise ValueError('Model instance cannot be None')
+        if not isinstance(param_distribution, dict):
+            raise TypeError('param_distribution must be a dictionary')
+        self.validate_data(x_train, y_train)
+        try:
+            search = RandomizedSearchCV(
+                estimator=model,
+                param_distributions=param_distribution,
+                n_iter=n_iter,
+                cv=cv,
+                scoring=scoring,
+                random_state=42,
+                n_jobs=-1,
+                verbose=1
+            )
+            search.fit(x_train, y_train)
+        except Exception as e:
+            raise RuntimeError(f"Hyperparameter tuning failed: {e}")
+
+        return {
+            "best_model": search.best_estimator_,
+            "best_params": search.best_params_,
+            "best_score": search.best_score_,
+            "cv_results": search.cv_results_
+        }
