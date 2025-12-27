@@ -20,3 +20,9 @@ class Ploter:
         plt.title(f"Bar Plot of {data_col.name}...")
         plt.xticks(rotation=90)
         plt.show()
+    def bar_feature_importance(self, top_10_fi):
+        plt.figure(figsize=(8,5))
+        top_10_fi.plot(kind='barh')
+        plt.title('Top 10 Feature Importances (Model-based)')
+        plt.gca().invert_yaxis()
+        plt.show()
